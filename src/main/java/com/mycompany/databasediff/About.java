@@ -45,12 +45,12 @@ public class About extends JDialog {
         mainPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(11, 11, 12, 12));
         mainPanel.setLayout(new java.awt.GridBagLayout());
 
+        copyrightTextArea.setEditable(false);
         copyrightTextArea.setBackground(javax.swing.UIManager.getDefaults().getColor("Panel.background"));
         copyrightTextArea.setColumns(25);
-        copyrightTextArea.setEditable(false);
         copyrightTextArea.setLineWrap(true);
         copyrightTextArea.setRows(8);
-        copyrightTextArea.setText("Anagrams\n\nCopyright (c) 2003  Irritable Enterprises, Inc.");
+        copyrightTextArea.setText("Database Diff\n\nCopyright (c) 2020");
         copyrightTextArea.setWrapStyleWord(true);
         copyrightTextArea.setBorder(null);
         copyrightTextArea.setFocusable(false);

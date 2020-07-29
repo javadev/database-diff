@@ -61,14 +61,14 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="copyrightTextArea">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="cc" id="Panel.background" palette="3" red="cc" type="palette"/>
             </Property>
             <Property name="columns" type="int" value="25"/>
-            <Property name="editable" type="boolean" value="false"/>
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="8"/>
-            <Property name="text" type="java.lang.String" value="Anagrams&#xa;&#xa;Copyright (c) 2003  Irritable Enterprises, Inc."/>
+            <Property name="text" type="java.lang.String" value="Database Diff&#xa;&#xa;Copyright (c) 2020"/>
             <Property name="wrapStyleWord" type="boolean" value="true"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="null"/>
