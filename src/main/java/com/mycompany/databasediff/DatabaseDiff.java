@@ -52,7 +52,7 @@ public class DatabaseDiff extends JFrame {
     public DatabaseDiff() {
         
         initComponents();
-        getRootPane().setDefaultButton(guessButton);
+        getRootPane().setDefaultButton(runDiffButton);
         sourceConnection.setText("");
         pack();
         // Center in the screen
@@ -77,8 +77,8 @@ public class DatabaseDiff extends JFrame {
         destinationConnectionLabel = new javax.swing.JLabel();
         destinationConnection = new javax.swing.JTextField();
         buttonsPanel = new javax.swing.JPanel();
-        guessButton = new javax.swing.JButton();
-        nextTrial = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
+        runDiffButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         mainMenu = new javax.swing.JMenuBar();
@@ -109,6 +109,7 @@ public class DatabaseDiff extends JFrame {
 
         sourceConnection.setColumns(20);
         sourceConnection.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        sourceConnection.setText("source");
         sourceConnection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sourceConnectionActionPerformed(evt);
@@ -133,6 +134,7 @@ public class DatabaseDiff extends JFrame {
 
         destinationConnection.setColumns(20);
         destinationConnection.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        destinationConnection.setText("target");
         destinationConnection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 destinationConnectionActionPerformed1(evt);
@@ -147,23 +149,23 @@ public class DatabaseDiff extends JFrame {
 
         buttonsPanel.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
-        guessButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        guessButton.setMnemonic('G');
-        guessButton.setText("Clear");
-        guessButton.setToolTipText("Guess the scrambled word.");
-        guessButton.addActionListener(new java.awt.event.ActionListener() {
+        clearButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        clearButton.setMnemonic('G');
+        clearButton.setText("Clear");
+        clearButton.setToolTipText("Guess the scrambled word.");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 guessedWordActionPerformed(evt);
             }
         });
 
-        nextTrial.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-        nextTrial.setMnemonic('N');
-        nextTrial.setText("Run Diff");
-        nextTrial.setToolTipText("Fetch a new word.");
-        nextTrial.addActionListener(new java.awt.event.ActionListener() {
+        runDiffButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        runDiffButton.setMnemonic('N');
+        runDiffButton.setText("Run Diff");
+        runDiffButton.setToolTipText("Fetch a new word.");
+        runDiffButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nextTrialActionPerformed(evt);
+                runDiffButtonActionPerformed(evt);
             }
         });
 
@@ -181,9 +183,9 @@ public class DatabaseDiff extends JFrame {
             buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(guessButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nextTrial)
+                .addComponent(runDiffButton)
                 .addContainerGap())
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
         );
@@ -194,8 +196,8 @@ public class DatabaseDiff extends JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(guessButton)
-                    .addComponent(nextTrial)))
+                    .addComponent(clearButton)
+                    .addComponent(runDiffButton)))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -209,7 +211,9 @@ public class DatabaseDiff extends JFrame {
 
         fileMenu.setMnemonic('F');
         fileMenu.setText("File");
+        fileMenu.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
 
+        aboutMenuItem.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         aboutMenuItem.setMnemonic('A');
         aboutMenuItem.setText("About");
         aboutMenuItem.setToolTipText("About");
@@ -220,6 +224,7 @@ public class DatabaseDiff extends JFrame {
         });
         fileMenu.add(aboutMenuItem);
 
+        exitMenuItem.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         exitMenuItem.setMnemonic('E');
         exitMenuItem.setText("Exit");
         exitMenuItem.setToolTipText("Quit Team, Quit!");
@@ -251,15 +256,14 @@ public class DatabaseDiff extends JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_sourceConnectionActionPerformed
 
-    private void nextTrialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextTrialActionPerformed
+    private void runDiffButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runDiffButtonActionPerformed
         // Start database diff
         ExtractListModel model = new ExtractListModel();
-        model.setSourceConnName("source");
-        model.setDestConnName("target");
+        model.setSourceConnName(sourceConnection.getText());
+        model.setDestConnName(destinationConnection.getText());
         DBDiffApi api = new DBDiffApi(model);
         api.doDiffWithDialog();
-//        DBException
-    }//GEN-LAST:event_nextTrialActionPerformed
+    }//GEN-LAST:event_runDiffButtonActionPerformed
 
     private void guessedWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guessedWordActionPerformed
         jTextArea1.setText("");
@@ -272,16 +276,16 @@ public class DatabaseDiff extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JPanel buttonsPanel;
+    private javax.swing.JButton clearButton;
     private javax.swing.JTextField destinationConnection;
     private javax.swing.JLabel destinationConnectionLabel;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JButton guessButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuBar mainMenu;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JButton nextTrial;
+    private javax.swing.JButton runDiffButton;
     private javax.swing.JTextField sourceConnection;
     private javax.swing.JLabel sourceConnectionLabel;
     // End of variables declaration//GEN-END:variables

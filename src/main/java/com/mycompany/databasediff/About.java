@@ -39,7 +39,7 @@ public class About extends JDialog {
         closeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("About Anagrams");
+        setTitle("About Database Diff");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         mainPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(11, 11, 12, 12));
@@ -48,6 +48,7 @@ public class About extends JDialog {
         copyrightTextArea.setEditable(false);
         copyrightTextArea.setBackground(javax.swing.UIManager.getDefaults().getColor("Panel.background"));
         copyrightTextArea.setColumns(25);
+        copyrightTextArea.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
         copyrightTextArea.setLineWrap(true);
         copyrightTextArea.setRows(8);
         copyrightTextArea.setText("Database Diff\n\nCopyright (c) 2020");
@@ -62,6 +63,7 @@ public class About extends JDialog {
         gridBagConstraints.insets = new java.awt.Insets(24, 0, 24, 0);
         mainPanel.add(copyrightTextArea, gridBagConstraints);
 
+        closeButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         closeButton.setMnemonic('C');
         closeButton.setText("Close");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
