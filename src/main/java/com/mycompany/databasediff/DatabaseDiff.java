@@ -5,6 +5,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import oracle.dbtools.raptor.dbdiff.DBDiffApi;
+import oracle.dbtools.raptor.extract.models.ExtractListModel;
 
 /**
  * Main window of the Anagram Game application.
@@ -51,9 +53,8 @@ public class DatabaseDiff extends JFrame {
         
         initComponents();
         getRootPane().setDefaultButton(guessButton);
-        scrambledWord.setText("");
+        sourceConnection.setText("");
         pack();
-        guessedWord.requestFocusInWindow();
         // Center in the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension frameSize = getSize();
@@ -71,11 +72,10 @@ public class DatabaseDiff extends JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         mainPanel = new javax.swing.JPanel();
-        scrambledLabel = new javax.swing.JLabel();
-        scrambledWord = new javax.swing.JTextField();
-        guessLabel = new javax.swing.JLabel();
-        guessedWord = new javax.swing.JTextField();
-        feedbackLabel = new javax.swing.JLabel();
+        sourceConnectionLabel = new javax.swing.JLabel();
+        sourceConnection = new javax.swing.JTextField();
+        destinationConnectionLabel = new javax.swing.JLabel();
+        destinationConnection = new javax.swing.JTextField();
         buttonsPanel = new javax.swing.JPanel();
         guessButton = new javax.swing.JButton();
         nextTrial = new javax.swing.JButton();
@@ -96,19 +96,22 @@ public class DatabaseDiff extends JFrame {
 
         mainPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(12, 12, 12, 12));
         mainPanel.setMinimumSize(new java.awt.Dimension(297, 200));
+        mainPanel.setNextFocusableComponent(sourceConnection);
         mainPanel.setLayout(new java.awt.GridBagLayout());
 
-        scrambledLabel.setText("Source Connection:");
+        sourceConnectionLabel.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        sourceConnectionLabel.setText("Source Connection:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 12, 6);
-        mainPanel.add(scrambledLabel, gridBagConstraints);
+        mainPanel.add(sourceConnectionLabel, gridBagConstraints);
 
-        scrambledWord.setColumns(20);
-        scrambledWord.addActionListener(new java.awt.event.ActionListener() {
+        sourceConnection.setColumns(20);
+        sourceConnection.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        sourceConnection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                scrambledWordActionPerformed(evt);
+                sourceConnectionActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -116,34 +119,35 @@ public class DatabaseDiff extends JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 12, 0);
-        mainPanel.add(scrambledWord, gridBagConstraints);
+        mainPanel.add(sourceConnection, gridBagConstraints);
 
-        guessLabel.setDisplayedMnemonic('Y');
-        guessLabel.setLabelFor(guessedWord);
-        guessLabel.setText("Destination Connection:");
+        destinationConnectionLabel.setDisplayedMnemonic('Y');
+        destinationConnectionLabel.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        destinationConnectionLabel.setLabelFor(destinationConnection);
+        destinationConnectionLabel.setText("Destination Connection:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 6);
-        mainPanel.add(guessLabel, gridBagConstraints);
+        mainPanel.add(destinationConnectionLabel, gridBagConstraints);
 
-        guessedWord.setColumns(20);
+        destinationConnection.setColumns(20);
+        destinationConnection.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        destinationConnection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                destinationConnectionActionPerformed1(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        mainPanel.add(guessedWord, gridBagConstraints);
+        mainPanel.add(destinationConnection, gridBagConstraints);
 
-        feedbackLabel.setText(" ");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
-        mainPanel.add(feedbackLabel, gridBagConstraints);
+        buttonsPanel.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
+        guessButton.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         guessButton.setMnemonic('G');
         guessButton.setText("Clear");
         guessButton.setToolTipText("Guess the scrambled word.");
@@ -153,6 +157,7 @@ public class DatabaseDiff extends JFrame {
             }
         });
 
+        nextTrial.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         nextTrial.setMnemonic('N');
         nextTrial.setText("Run Diff");
         nextTrial.setToolTipText("Fetch a new word.");
@@ -162,9 +167,12 @@ public class DatabaseDiff extends JFrame {
             }
         });
 
+        jScrollPane1.setFocusable(false);
+
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
         jTextArea1.setRows(5);
-        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("Database diff result"));
+        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Database diff result", 0, 0, new java.awt.Font("Tahoma", 0, 16))); // NOI18N
         jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
@@ -183,7 +191,7 @@ public class DatabaseDiff extends JFrame {
             buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(guessButton)
@@ -239,34 +247,42 @@ public class DatabaseDiff extends JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitForm
 
-    private void scrambledWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scrambledWordActionPerformed
+    private void sourceConnectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sourceConnectionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_scrambledWordActionPerformed
+    }//GEN-LAST:event_sourceConnectionActionPerformed
 
     private void nextTrialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextTrialActionPerformed
         // Start database diff
+        ExtractListModel model = new ExtractListModel();
+        model.setSourceConnName("source");
+        model.setDestConnName("target");
+        DBDiffApi api = new DBDiffApi(model);
+        api.doDiffWithDialog();
     }//GEN-LAST:event_nextTrialActionPerformed
 
     private void guessedWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guessedWordActionPerformed
         jTextArea1.setText("");
     }//GEN-LAST:event_guessedWordActionPerformed
 
+    private void destinationConnectionActionPerformed1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_destinationConnectionActionPerformed1
+        // TODO add your handling code here:
+    }//GEN-LAST:event_destinationConnectionActionPerformed1
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JPanel buttonsPanel;
+    private javax.swing.JTextField destinationConnection;
+    private javax.swing.JLabel destinationConnectionLabel;
     private javax.swing.JMenuItem exitMenuItem;
-    private javax.swing.JLabel feedbackLabel;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JButton guessButton;
-    private javax.swing.JLabel guessLabel;
-    private javax.swing.JTextField guessedWord;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuBar mainMenu;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton nextTrial;
-    private javax.swing.JLabel scrambledLabel;
-    private javax.swing.JTextField scrambledWord;
+    private javax.swing.JTextField sourceConnection;
+    private javax.swing.JLabel sourceConnectionLabel;
     // End of variables declaration//GEN-END:variables
 
 }
