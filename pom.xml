@@ -62,8 +62,8 @@
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>dbmaestro.teamwork</groupId>
-            <artifactId>sqldevextension</artifactId>
+            <groupId>com.oracle</groupId>
+            <artifactId>dbapi</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

@@ -258,6 +258,7 @@ public class DatabaseDiff extends JFrame {
         model.setDestConnName("target");
         DBDiffApi api = new DBDiffApi(model);
         api.doDiffWithDialog();
+//        DBException
     }//GEN-LAST:event_nextTrialActionPerformed
 
     private void guessedWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guessedWordActionPerformed
