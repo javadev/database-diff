@@ -9,7 +9,7 @@ import oracle.dbtools.raptor.dbdiff.DBDiffApi;
 import oracle.dbtools.raptor.extract.models.ExtractListModel;
 
 /**
- * Main window of the Anagram Game application.
+ * Main window of the Database Diff application.
  */
 public class DatabaseDiff extends JFrame {
 
@@ -46,14 +46,11 @@ public class DatabaseDiff extends JFrame {
         });
     }
 
-    private int wordIdx = 0;
-
-    /** Creates new form Anagrams */
+    /** Creates new form Database Diff */
     public DatabaseDiff() {
         
         initComponents();
         getRootPane().setDefaultButton(runDiffButton);
-        sourceConnection.setText("");
         pack();
         // Center in the screen
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
