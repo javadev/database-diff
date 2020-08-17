@@ -3,10 +3,14 @@ package com.mycompany.databasediff;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import oracle.dbtools.raptor.dbdiff.DBDiffApi;
 import oracle.dbtools.raptor.extract.models.ExtractListModel;
+import oracle.jdeveloper.db.ConnectionException;
+import oracle.jdeveloper.db.DatabaseConnections;
+import org.openide.util.Exceptions;
 
 /**
  * Main window of the Database Diff application.
@@ -254,12 +258,20 @@ public class DatabaseDiff extends JFrame {
     }//GEN-LAST:event_sourceConnectionActionPerformed
 
     private void runDiffButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runDiffButtonActionPerformed
-        // Start database diff
-        ExtractListModel model = new ExtractListModel();
-        model.setSourceConnName(sourceConnection.getText());
-        model.setDestConnName(destinationConnection.getText());
-        DBDiffApi api = new DBDiffApi(model);
-        api.doDiffWithDialog();
+        try {
+            DatabaseConnections databaseConnections = DatabaseConnections.getInstance();
+            Properties properties = new Properties();
+            properties.put("", "");
+            databaseConnections.addConnection("source", properties);
+            // Start database diff
+            ExtractListModel model = new ExtractListModel();
+            model.setSourceConnName(sourceConnection.getText());
+            model.setDestConnName(destinationConnection.getText());
+            DBDiffApi api = new DBDiffApi(model);
+            api.doDiffWithDialog();
+        } catch (ConnectionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
     }//GEN-LAST:event_runDiffButtonActionPerformed
 
     private void guessedWordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guessedWordActionPerformed
