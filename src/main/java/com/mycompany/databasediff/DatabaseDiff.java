@@ -3,13 +3,28 @@ package com.mycompany.databasediff;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Properties;
+import javax.ide.Service;
+import javax.ide.extension.ElementVisitorFactory;
+import javax.ide.extension.Extension;
+import javax.ide.extension.spi.ExtensionVisitor;
+import javax.ide.util.Version;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import oracle.dbtools.raptor.dbdiff.DBDiffApi;
 import oracle.dbtools.raptor.extract.models.ExtractListModel;
+import oracle.ide.ExtensionRegistry;
+import oracle.ide.extension.feature.FeatureRegistry;
+import oracle.ideimpl.extension.BridgeExtensionRegistry;
+import oracle.ideimpl.extension.ExtensionManagerImpl;
 import oracle.jdeveloper.db.ConnectionException;
 import oracle.jdeveloper.db.DatabaseConnections;
+import oracle.jdevimpl.db.adapter.StorageWrapper;
 import org.openide.util.Exceptions;
 
 /**
@@ -259,7 +274,12 @@ public class DatabaseDiff extends JFrame {
 
     private void runDiffButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runDiffButtonActionPerformed
         try {
+            StorageWrapper wrapper = StorageWrapper.createSystemWrapper(new URL("file:///test"));
+//            StorageWrapper.
+            Service.resetAllServices();
+            ExtensionRegistry.resetAllServices();
             DatabaseConnections databaseConnections = DatabaseConnections.getInstance();
+            Collection<String> connections = databaseConnections.listConnections();
             Properties properties = new Properties();
             properties.put("", "");
             databaseConnections.addConnection("source", properties);
@@ -269,7 +289,7 @@ public class DatabaseDiff extends JFrame {
             model.setDestConnName(destinationConnection.getText());
             DBDiffApi api = new DBDiffApi(model);
             api.doDiffWithDialog();
-        } catch (ConnectionException ex) {
+        } catch (ConnectionException | MalformedURLException ex) {
             Exceptions.printStackTrace(ex);
         }
     }//GEN-LAST:event_runDiffButtonActionPerformed

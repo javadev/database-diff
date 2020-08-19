@@ -8,10 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="DatabaseDiff (3)" />
         <module name="DatabaseDiff (2)" />
+        <module name="DatabaseDiff" />
         <module name="DatabaseDiff (1)" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="DatabaseDiff" target="1.8" />
       <module name="DatabaseDiff (1)" target="1.8" />
       <module name="DatabaseDiff (2)" target="1.8" />
       <module name="DatabaseDiff (3)" target="1.8" />
